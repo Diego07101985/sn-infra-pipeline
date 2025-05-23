@@ -20,45 +20,11 @@ variable "execution_role_arn" {
   default     = ""
 }
 
-
-variable "processing_image_uri" {
-  description = "URI of the ECR image for the feature selection step"
-  type        = string
-  default     = ""
-}
-
-variable "training_image_uri" {
-  description = "URI of the ECR image for the training step"
-  type        = string
-  default     = ""
-}
-
-variable "evaluation_image_uri" {
-  description = "URI of the ECR image for the evaluation step"
-  type        = string
-  default     = ""
-}
-
 variable "env" {
   description = "Environment name (dev, staging, prod)"
   type        = string
   default     = "dev"
 }
 
-variable "processing_instance_type" {
-  description = "Instance type for the feature selection step"
-  type        = string
-  default     = "ml.t3.medium"
-}
 
-variable "training_instance_type" {
-  description = "Instance type for the training step"
-  type        = string
-  default     = "ml.t3.medium"
-}
 
-variable "evaluation_instance_type" {
-  description = "Instance type for the evaluation step"
-  type        = string
-  default     = "ml.t3.medium"
-}

@@ -1,6 +1,17 @@
+
 variable "pipeline_name" {
-  description = "Name identifier for resources"
+  description = "Name identifier for resources (used as subfolder name)"
   type        = string
+}
+
+variable "shared_input_bucket_name" {
+  type        = string
+  description = "Nome do bucket único de input"
+}
+
+variable "shared_output_bucket_name" {
+  type        = string
+  description = "Nome do bucket único de output"
 }
 
 variable "create_ecr_repository" {
@@ -13,16 +24,4 @@ variable "ecr_repository_name" {
   description = "Name of the ECR repository (only used if create_ecr_repository = true)"
   type        = string
   default     = null
-}
-
-variable "create_input_bucket" {
-  description = "Whether to create the S3 input bucket"
-  type        = bool
-  default     = true
-}
-
-variable "create_output_bucket" {
-  description = "Whether to create the S3 output bucket"
-  type        = bool
-  default     = true
 }

@@ -1,6 +1,10 @@
 name: Deploy SageMaker Pipelines
 on:
   workflow_call:
+    inputs:
+      pipelines:
+        required: true
+        type: string
 
 jobs:
   deploy:
@@ -8,9 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        tfvars:
-          - vars/iris/iris.tfvars
-          - vars/propensity/propensity.tfvars
+        pipeline: ${{ fromJson(inputs.pipelines) }}
 
     steps:
       - uses: actions/checkout@v3
@@ -22,13 +24,22 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Set up Python environment
+      - name: Set up Python
         run: |
           python3 -m venv venv
           source venv/bin/activate
           pip install boto3 sagemaker jinja2
 
-      - name: Deploy SageMaker pipeline
+      - name: Deploy pipeline
         run: |
-          echo "Deploying pipeline using config: ${{ matrix.tfvars }}"
-          python scripts/deploy_pipeline.py --config "${{ matrix.tfvars }}"
+          python scripts/deploy_pipeline.py \
+            --pipeline_name "${{ matrix.pipeline.name }}" \
+            --processing_image_uri "${{ matrix.pipeline.processing_image_uri }}" \
+            --training_image_uri "${{ matrix.pipeline.training_image_uri }}" \
+            --evaluation_image_uri "${{ matrix.pipeline.evaluation_image_uri }}" \
+            --decision_image_uri "${{ matrix.pipeline.decision_image_uri }}" \
+            --error_image_uri "${{ matrix.pipeline.error_image_uri }}" \
+            --sagemaker_role_arn "${{ secrets.SAGEMAKER_ROLE_ARN }}" \
+            --s3_input_data "${{ matrix.pipeline.s3_input_data }}" \
+            --s3_output_data "${{ matrix.pipeline.s3_output_data }}" \
+            --threshold_evaluate "${{ matrix.pipeline.threshold_evaluate }}"
