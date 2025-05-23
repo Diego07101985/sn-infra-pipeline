@@ -1,0 +1,16 @@
+name: ML Pipeline CI/CD Orchestration
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-terraform:
+    name: Trigger Terraform Workflow
+    uses: ./.github/workflows/terraform.yml
+    secrets: inherit
+
+  trigger-deploy:
+    name: Trigger Deploy Workflow
+    needs: trigger-terraform
+    uses: ./.github/workflows/deploy_matrix.yml
+    secrets: inherit

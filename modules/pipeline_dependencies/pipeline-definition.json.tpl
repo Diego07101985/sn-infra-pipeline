@@ -1,4 +1,5 @@
 {
+  "Version": "2020-12-01",
   "Steps": [
     {
       "Name": "FeatureSelection",
@@ -6,8 +7,8 @@
       "Arguments": {
         "ProcessingJobName": "${pipeline_name}-feature-select",
         "AppSpecification": {
-          "ImageUri": "${ecr_image_uri}",
-          "ContainerEntrypoint": ["python3", "/opt/ml/processing/input/code/featureselect.py"]
+          "ImageUri": "${processing_image_uri}",
+          "ContainerEntrypoint": ["python3", "/opt/program/featureselect.py"]
         },
         "ProcessingResources": {
           "ClusterConfig": {
@@ -20,17 +21,8 @@
           {
             "InputName": "input-data",
             "S3Input": {
-              "S3Uri": "s3://${s3_bucket}/${s3_prefix}/input/",
+              "S3Uri": "s3://${s3_input_data}/input/",
               "LocalPath": "/opt/ml/processing/input/data",
-              "S3DataType": "S3Prefix",
-              "S3InputMode": "File"
-            }
-          },
-          {
-            "InputName": "code",
-            "S3Input": {
-              "S3Uri": "${code_s3_uri}",
-              "LocalPath": "/opt/ml/processing/input/code",
               "S3DataType": "S3Prefix",
               "S3InputMode": "File"
             }
@@ -41,7 +33,7 @@
             {
               "OutputName": "selected-features",
               "S3Output": {
-                "S3Uri": "s3://${s3_bucket}/${s3_prefix}/processing/selected_features/",
+                "S3Uri": "s3://${s3_output_data}/processing/selected_features/",
                 "LocalPath": "/opt/ml/processing/output",
                 "S3UploadMode": "EndOfJob"
               }
@@ -56,8 +48,8 @@
       "Arguments": {
         "ProcessingJobName": "${pipeline_name}-training",
         "AppSpecification": {
-          "ImageUri": "${ecr_image_uri}",
-          "ContainerEntrypoint": ["python3", "/opt/ml/processing/input/code/trainning.py"]
+          "ImageUri": "${training_image_uri}",
+          "ContainerEntrypoint": ["python3", "/opt/program/training.py"]
         },
         "ProcessingResources": {
           "ClusterConfig": {
@@ -70,17 +62,8 @@
           {
             "InputName": "training-data",
             "S3Input": {
-              "S3Uri": "s3://${s3_bucket}/${s3_prefix}/processing/selected_features/",
+              "S3Uri": "s3://${s3_input_data}/processing/selected_features/",
               "LocalPath": "/opt/ml/processing/input/data",
-              "S3DataType": "S3Prefix",
-              "S3InputMode": "File"
-            }
-          },
-          {
-            "InputName": "code",
-            "S3Input": {
-              "S3Uri": "${code_s3_uri}",
-              "LocalPath": "/opt/ml/processing/input/code",
               "S3DataType": "S3Prefix",
               "S3InputMode": "File"
             }
@@ -91,7 +74,7 @@
             {
               "OutputName": "trained-model",
               "S3Output": {
-                "S3Uri": "s3://${s3_bucket}/${s3_prefix}/processing/trained_model/",
+                "S3Uri": "s3://${s3_output_data}/processing/trained_model/",
                 "LocalPath": "/opt/ml/processing/output",
                 "S3UploadMode": "EndOfJob"
               }
@@ -106,8 +89,8 @@
       "Arguments": {
         "ProcessingJobName": "${pipeline_name}-evaluation",
         "AppSpecification": {
-          "ImageUri": "${ecr_image_uri}",
-          "ContainerEntrypoint": ["python3", "/opt/ml/processing/input/code/evaluate.py"]
+          "ImageUri": "${evaluation_image_uri}",
+          "ContainerEntrypoint": ["python3", "/opt/program/evaluate.py"]
         },
         "ProcessingResources": {
           "ClusterConfig": {
@@ -120,17 +103,8 @@
           {
             "InputName": "model-artifact",
             "S3Input": {
-              "S3Uri": "s3://${s3_bucket}/${s3_prefix}/processing/trained_model/model.tar.gz",
+              "S3Uri": "s3://${s3_input_data}/processing/trained_model/model.tar.gz",
               "LocalPath": "/opt/ml/processing/input/model",
-              "S3DataType": "S3Prefix",
-              "S3InputMode": "File"
-            }
-          },
-          {
-            "InputName": "code",
-            "S3Input": {
-              "S3Uri": "${code_s3_uri}",
-              "LocalPath": "/opt/ml/processing/input/code",
               "S3DataType": "S3Prefix",
               "S3InputMode": "File"
             }
@@ -141,7 +115,7 @@
             {
               "OutputName": "evaluation-report",
               "S3Output": {
-                "S3Uri": "s3://${s3_bucket}/${s3_prefix}/processing/evaluation_report/",
+                "S3Uri": "s3://${s3_output_data}/processing/evaluation_report/",
                 "LocalPath": "/opt/ml/processing/output",
                 "S3UploadMode": "EndOfJob"
               }

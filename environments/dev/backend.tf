@@ -1,10 +1,10 @@
 terraform {
   backend "s3" {
-    bucket         = "sn-ml-pipeline-terraform-state-files"
+    bucket         = "dev-sn-ml-pipeline-terraform-state-files"
     key            = "prod/terraform.tfstate"
-    dynamodb_table = "dev-sn-ml-pipeline-terraform-running-state-locks"
     region         = "us-east-1"
     encrypt        = true
+    use_lockfile   = true
   }
 
   required_providers {
