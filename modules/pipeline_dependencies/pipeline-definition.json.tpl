@@ -21,7 +21,7 @@
           {
             "InputName": "input-data",
             "S3Input": {
-              "S3Uri": "s3://${s3_input_data}/input/",
+              "S3Uri": "s3://${s3_input_data}/input/${pipeline_name}/",
               "LocalPath": "/opt/ml/processing/input/data",
               "S3DataType": "S3Prefix",
               "S3InputMode": "File"
@@ -33,7 +33,7 @@
             {
               "OutputName": "selected-features",
               "S3Output": {
-                "S3Uri": "s3://${s3_output_data}/processing/selected_features/",
+                "S3Uri": "s3://${s3_output_data}/processing/${pipeline_name}/selected_features/",
                 "LocalPath": "/opt/ml/processing/output",
                 "S3UploadMode": "EndOfJob"
               }
@@ -74,7 +74,7 @@
             {
               "OutputName": "trained-model",
               "S3Output": {
-                "S3Uri": "s3://${s3_output_data}/processing/trained_model/",
+                "S3Uri": "s3://${s3_output_data}/processing/${pipeline_name}/trained_model/",
                 "LocalPath": "/opt/ml/processing/output",
                 "S3UploadMode": "EndOfJob"
               }
@@ -115,7 +115,7 @@
             {
               "OutputName": "evaluation-report",
               "S3Output": {
-                "S3Uri": "s3://${s3_output_data}/processing/evaluation_report/",
+                "S3Uri": "s3://${s3_output_data}/processing/${pipeline_name}/evaluation_report/",
                 "LocalPath": "/opt/ml/processing/output",
                 "S3UploadMode": "EndOfJob"
               }
